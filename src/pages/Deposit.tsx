@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,21 +6,53 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowDownCircle, Copy, Check, Bitcoin, Wallet } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
-const cryptos = [
-  { symbol: "BTC", name: "Bitcoin", address: "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa" },
-  { symbol: "ETH", name: "Ethereum", address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb" },
-  { symbol: "USDT", name: "Tether", address: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb" },
-];
+interface UserWallet {
+  crypto_symbol: string;
+  wallet_address: string;
+}
 
 const Deposit = () => {
   const [amount, setAmount] = useState("");
-  const [selectedCrypto, setSelectedCrypto] = useState(cryptos[0]);
+  const [wallets, setWallets] = useState<UserWallet[]>([]);
+  const [selectedCrypto, setSelectedCrypto] = useState("BTC");
   const [copiedAddress, setCopiedAddress] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+
+  useEffect(() => {
+    const fetchWallets = async () => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from("user_wallets")
+        .select("crypto_symbol, wallet_address")
+        .eq("user_id", user.id);
+
+      if (error) {
+        toast.error("Failed to load wallet addresses");
+        console.error(error);
+      } else if (data) {
+        setWallets(data);
+      }
+      setLoading(false);
+    };
+
+    fetchWallets();
+  }, [user]);
+
+  const getCurrentWallet = () => {
+    return wallets.find(w => w.crypto_symbol === selectedCrypto);
+  };
 
   const handleCopyAddress = async () => {
+    const wallet = getCurrentWallet();
+    if (!wallet) return;
+
     try {
-      await navigator.clipboard.writeText(selectedCrypto.address);
+      await navigator.clipboard.writeText(wallet.wallet_address);
       setCopiedAddress(true);
       toast.success("Address copied to clipboard!");
       setTimeout(() => setCopiedAddress(false), 2000);
@@ -56,79 +88,85 @@ const Deposit = () => {
             </div>
           </div>
 
-          <Tabs defaultValue="BTC" className="space-y-6">
-            <TabsList className="grid grid-cols-3 w-full">
-              {cryptos.map((crypto) => (
-                <TabsTrigger
-                  key={crypto.symbol}
-                  value={crypto.symbol}
-                  onClick={() => setSelectedCrypto(crypto)}
-                >
-                  {crypto.symbol}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+          {loading ? (
+            <div className="text-center py-8">Loading wallet addresses...</div>
+          ) : (
+            <Tabs defaultValue="BTC" className="space-y-6" onValueChange={setSelectedCrypto}>
+              <TabsList className="grid grid-cols-3 w-full">
+                {["BTC", "ETH", "USDT"].map((symbol) => (
+                  <TabsTrigger key={symbol} value={symbol}>
+                    {symbol}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
 
-            {cryptos.map((crypto) => (
-              <TabsContent key={crypto.symbol} value={crypto.symbol} className="space-y-6">
-                {/* Amount Input */}
-                <div className="space-y-2">
-                  <Label htmlFor="amount">Deposit Amount</Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    placeholder={`Enter ${crypto.symbol} amount`}
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="h-12 text-lg"
-                  />
-                  <p className="text-sm text-muted-foreground">
-                    Minimum: 0.001 {crypto.symbol}
-                  </p>
-                </div>
+              {["BTC", "ETH", "USDT"].map((symbol) => {
+                const wallet = wallets.find(w => w.crypto_symbol === symbol);
+                return (
+                  <TabsContent key={symbol} value={symbol} className="space-y-6">
+                    {/* Amount Input */}
+                    <div className="space-y-2">
+                      <Label htmlFor="amount">Deposit Amount</Label>
+                      <Input
+                        id="amount"
+                        type="number"
+                        placeholder={`Enter ${symbol} amount`}
+                        value={amount}
+                        onChange={(e) => setAmount(e.target.value)}
+                        className="h-12 text-lg"
+                      />
+                      <p className="text-sm text-muted-foreground">
+                        Minimum: 0.001 {symbol}
+                      </p>
+                    </div>
 
-                {/* Deposit Address */}
-                <div className="space-y-2">
-                  <Label>Deposit Address</Label>
-                  <div className="p-4 rounded-lg bg-secondary border border-border">
-                    <p className="text-sm font-mono break-all mb-3">{crypto.address}</p>
-                    <Button
-                      onClick={handleCopyAddress}
-                      variant={copiedAddress ? "success" : "outline"}
-                      size="sm"
-                      className="w-full"
-                    >
-                      {copiedAddress ? (
-                        <>
-                          <Check className="h-4 w-4" />
-                          Copied!
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="h-4 w-4" />
-                          Copy Address
-                        </>
-                      )}
+                    {/* Deposit Address */}
+                    <div className="space-y-2">
+                      <Label>Your Personal Deposit Address</Label>
+                      <div className="p-4 rounded-lg bg-secondary border border-border">
+                        <p className="text-sm font-mono break-all mb-3">
+                          {wallet?.wallet_address || "No wallet found"}
+                        </p>
+                        <Button
+                          onClick={handleCopyAddress}
+                          variant={copiedAddress ? "success" : "outline"}
+                          size="sm"
+                          className="w-full"
+                          disabled={!wallet}
+                        >
+                          {copiedAddress ? (
+                            <>
+                              <Check className="h-4 w-4" />
+                              Copied!
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-4 w-4" />
+                              Copy Address
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* QR Code Placeholder */}
+                    <div className="p-6 rounded-lg bg-secondary border border-border flex flex-col items-center justify-center">
+                      <div className="w-48 h-48 rounded-lg bg-background/50 flex items-center justify-center mb-3">
+                        <Wallet className="h-16 w-16 text-muted-foreground" />
+                      </div>
+                      <p className="text-sm text-muted-foreground text-center">
+                        Scan QR code to deposit {symbol}
+                      </p>
+                    </div>
+
+                    <Button variant="gradient" size="lg" className="w-full">
+                      Confirm Deposit
                     </Button>
-                  </div>
-                </div>
-
-                {/* QR Code Placeholder */}
-                <div className="p-6 rounded-lg bg-secondary border border-border flex flex-col items-center justify-center">
-                  <div className="w-48 h-48 rounded-lg bg-background/50 flex items-center justify-center mb-3">
-                    <Wallet className="h-16 w-16 text-muted-foreground" />
-                  </div>
-                  <p className="text-sm text-muted-foreground text-center">
-                    Scan QR code to deposit {crypto.symbol}
-                  </p>
-                </div>
-
-                <Button variant="gradient" size="lg" className="w-full">
-                  Confirm Deposit
-                </Button>
-              </TabsContent>
-            ))}
-          </Tabs>
+                  </TabsContent>
+                );
+              })}
+            </Tabs>
+          )}
         </Card>
 
         {/* Info & History */}
@@ -139,11 +177,11 @@ const Deposit = () => {
             <div className="space-y-3 text-sm text-muted-foreground">
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5" />
-                <p>Send only {selectedCrypto.symbol} to this address. Other assets will be lost.</p>
+                <p>Send only {selectedCrypto} to this address. Other assets will be lost.</p>
               </div>
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5" />
-                <p>Minimum deposit: 0.001 {selectedCrypto.symbol}</p>
+                <p>Minimum deposit: 0.001 {selectedCrypto}</p>
               </div>
               <div className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5" />
@@ -163,7 +201,7 @@ const Deposit = () => {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Network</span>
                 <span className="font-medium">
-                  {selectedCrypto.symbol === "BTC" ? "Bitcoin" : "Ethereum (ERC-20)"}
+                  {selectedCrypto === "BTC" ? "Bitcoin" : "Ethereum (ERC-20)"}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">

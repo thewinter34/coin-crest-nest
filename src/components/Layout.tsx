@@ -1,6 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, TrendingUp, Calculator, Users, ArrowDownCircle, ArrowUpCircle } from "lucide-react";
+import { Home, TrendingUp, Calculator, Users, ArrowDownCircle, ArrowUpCircle, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: Home },
@@ -13,6 +15,7 @@ const navigation = [
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
+  const { signOut } = useAuth();
 
   return (
     <div className="min-h-screen bg-background">
@@ -20,13 +23,25 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
       <nav className="border-b border-border/50 backdrop-blur-lg bg-card/30 sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-                <TrendingUp className="h-5 w-5 text-primary-foreground" />
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
+                  <TrendingUp className="h-5 w-5 text-primary-foreground" />
+                </div>
+                <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  StakeVault
+                </span>
               </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                StakeVault
-              </span>
+
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={signOut}
+                className="flex items-center gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="hidden sm:inline">Sign Out</span>
+              </Button>
             </div>
 
             <div className="hidden md:flex items-center gap-1">
