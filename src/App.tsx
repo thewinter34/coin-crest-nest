@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
+import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Staking from "./pages/Staking";
 import Calculator from "./pages/Calculator";
@@ -29,7 +30,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!user) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <Layout>{children}</Layout>;
@@ -43,8 +44,9 @@ const App = () => (
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            <Route path="/" element={<Landing />} />
             <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/staking" element={<ProtectedRoute><Staking /></ProtectedRoute>} />
             <Route path="/calculator" element={<ProtectedRoute><Calculator /></ProtectedRoute>} />
             <Route path="/referral" element={<ProtectedRoute><Referral /></ProtectedRoute>} />
