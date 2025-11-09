@@ -6,15 +6,15 @@ import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   return (
-    <div className="space-y-8 pb-20 md:pb-8">
+    <div className="space-y-6 md:space-y-8 pb-20 md:pb-8 px-4 md:px-0">
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold mb-2">Dashboard</h1>
-        <p className="text-muted-foreground">Welcome back! Here's your staking overview.</p>
+        <h1 className="text-3xl md:text-4xl font-bold mb-2">Dashboard</h1>
+        <p className="text-sm md:text-base text-muted-foreground">Welcome back! Here's your staking overview.</p>
       </div>
 
       {/* Quick Actions */}
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
         <Link to="/deposit" className="flex-1">
           <Button variant="gradient" size="lg" className="w-full">
             <ArrowDownCircle className="h-5 w-5" />
@@ -30,7 +30,7 @@ const Dashboard = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         <StatsCard
           title="Total Staked Balance"
           value="$12,450.00"
@@ -54,8 +54,8 @@ const Dashboard = () => {
       </div>
 
       {/* Active Staking Status */}
-      <Card className="glass-card p-6">
-        <div className="flex items-center justify-between mb-6">
+      <Card className="glass-card p-4 md:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <div>
             <h3 className="text-xl font-bold mb-1">Staking Status</h3>
             <p className="text-sm text-muted-foreground">Your active staking positions</p>
@@ -68,15 +68,15 @@ const Dashboard = () => {
 
         <div className="space-y-4">
           {/* Staking Position 1 */}
-          <div className="p-4 rounded-lg bg-secondary/50 border border-border/50">
-            <div className="flex items-center justify-between mb-3">
+          <div className="p-3 md:p-4 rounded-lg bg-secondary/50 border border-border/50">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
               <div>
-                <h4 className="font-semibold">Flexible Staking</h4>
-                <p className="text-sm text-muted-foreground">No lock period</p>
+                <h4 className="font-semibold text-sm md:text-base">Flexible Staking</h4>
+                <p className="text-xs md:text-sm text-muted-foreground">No lock period</p>
               </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold">$8,500.00</p>
-                <p className="text-sm text-primary">2.5% APY</p>
+              <div className="sm:text-right">
+                <p className="text-xl md:text-2xl font-bold">$8,500.00</p>
+                <p className="text-xs md:text-sm text-primary">2.5% APY</p>
               </div>
             </div>
             <div className="flex items-center justify-between text-sm">
@@ -86,15 +86,15 @@ const Dashboard = () => {
           </div>
 
           {/* Staking Position 2 */}
-          <div className="p-4 rounded-lg bg-secondary/50 border border-border/50">
-            <div className="flex items-center justify-between mb-3">
+          <div className="p-3 md:p-4 rounded-lg bg-secondary/50 border border-border/50">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
               <div>
-                <h4 className="font-semibold">90-Day Fixed</h4>
-                <p className="text-sm text-muted-foreground">68 days remaining</p>
+                <h4 className="font-semibold text-sm md:text-base">90-Day Fixed</h4>
+                <p className="text-xs md:text-sm text-muted-foreground">68 days remaining</p>
               </div>
-              <div className="text-right">
-                <p className="text-2xl font-bold">$3,950.00</p>
-                <p className="text-sm text-primary">5.2% APY</p>
+              <div className="sm:text-right">
+                <p className="text-xl md:text-2xl font-bold">$3,950.00</p>
+                <p className="text-xs md:text-sm text-primary">5.2% APY</p>
               </div>
             </div>
             <div className="flex items-center justify-between text-sm mb-2">
@@ -115,8 +115,8 @@ const Dashboard = () => {
       </Card>
 
       {/* Recent Activity */}
-      <Card className="glass-card p-6">
-        <h3 className="text-xl font-bold mb-4">Recent Activity</h3>
+      <Card className="glass-card p-4 md:p-6">
+        <h3 className="text-lg md:text-xl font-bold mb-4">Recent Activity</h3>
         <div className="space-y-3">
           {[
             { type: "Stake", amount: "+$2,000", time: "2 hours ago", status: "success" },
@@ -124,14 +124,14 @@ const Dashboard = () => {
             { type: "Withdraw", amount: "-$500", time: "3 days ago", status: "pending" },
           ].map((activity, i) => (
             <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-secondary/50 transition-all">
-              <div className="flex items-center gap-3">
-                <div className={`w-2 h-2 rounded-full ${activity.status === 'success' ? 'bg-success' : 'bg-warning'}`} />
-                <div>
-                  <p className="font-medium">{activity.type}</p>
-                  <p className="text-sm text-muted-foreground">{activity.time}</p>
+              <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+                <div className={`w-2 h-2 rounded-full flex-shrink-0 ${activity.status === 'success' ? 'bg-success' : 'bg-warning'}`} />
+                <div className="min-w-0">
+                  <p className="font-medium text-sm md:text-base">{activity.type}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{activity.time}</p>
                 </div>
               </div>
-              <p className={`font-bold ${activity.amount.startsWith('+') ? 'text-success' : 'text-foreground'}`}>
+              <p className={`font-bold text-sm md:text-base flex-shrink-0 ${activity.amount.startsWith('+') ? 'text-success' : 'text-foreground'}`}>
                 {activity.amount}
               </p>
             </div>

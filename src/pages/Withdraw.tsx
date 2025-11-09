@@ -39,23 +39,23 @@ const Withdraw = () => {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-20 md:pb-8">
+    <div className="max-w-4xl mx-auto space-y-6 md:space-y-8 pb-20 md:pb-8 px-4 md:px-0">
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold mb-2">Withdraw Funds</h1>
-        <p className="text-muted-foreground">Transfer your cryptocurrency to an external wallet</p>
+        <h1 className="text-3xl md:text-4xl font-bold mb-2">Withdraw Funds</h1>
+        <p className="text-sm md:text-base text-muted-foreground">Transfer your cryptocurrency to an external wallet</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Withdraw Form */}
-        <Card className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center">
-              <ArrowUpCircle className="h-6 w-6 text-primary-foreground" />
+        <Card className="glass-card p-4 md:p-6">
+          <div className="flex items-center gap-3 mb-4 md:mb-6">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl gradient-primary flex items-center justify-center flex-shrink-0">
+              <ArrowUpCircle className="h-5 w-5 md:h-6 md:w-6 text-primary-foreground" />
             </div>
-            <div>
-              <h2 className="text-xl font-bold">Request Withdrawal</h2>
-              <p className="text-sm text-muted-foreground">Choose cryptocurrency</p>
+            <div className="min-w-0">
+              <h2 className="text-lg md:text-xl font-bold">Request Withdrawal</h2>
+              <p className="text-xs md:text-sm text-muted-foreground">Choose cryptocurrency</p>
             </div>
           </div>
 
@@ -75,9 +75,9 @@ const Withdraw = () => {
             {cryptos.map((crypto) => (
               <TabsContent key={crypto.symbol} value={crypto.symbol} className="space-y-6">
                 {/* Available Balance */}
-                <div className="p-4 rounded-lg bg-secondary border border-border">
-                  <p className="text-sm text-muted-foreground mb-1">Available Balance</p>
-                  <p className="text-2xl font-bold">
+                <div className="p-3 md:p-4 rounded-lg bg-secondary border border-border">
+                  <p className="text-xs md:text-sm text-muted-foreground mb-1">Available Balance</p>
+                  <p className="text-xl md:text-2xl font-bold">
                     {crypto.available} {crypto.symbol}
                   </p>
                 </div>
@@ -120,8 +120,8 @@ const Withdraw = () => {
                 </div>
 
                 {/* Fee Breakdown */}
-                <div className="space-y-3 p-4 rounded-lg bg-secondary border border-border">
-                  <div className="flex items-center justify-between text-sm">
+                <div className="space-y-2 md:space-y-3 p-3 md:p-4 rounded-lg bg-secondary border border-border">
+                  <div className="flex items-center justify-between text-xs md:text-sm">
                     <span className="text-muted-foreground">Withdrawal Amount</span>
                     <span className="font-medium">{amount || "0"} {crypto.symbol}</span>
                   </div>
@@ -129,9 +129,9 @@ const Withdraw = () => {
                     <span className="text-muted-foreground">Network Fee ({crypto.feePercent})</span>
                     <span className="font-medium text-warning">-{crypto.fee} {crypto.symbol}</span>
                   </div>
-                  <div className="pt-3 border-t border-border flex items-center justify-between">
-                    <span className="font-medium">You'll Receive</span>
-                    <span className="text-xl font-bold text-success">
+                  <div className="pt-2 md:pt-3 border-t border-border flex items-center justify-between">
+                    <span className="font-medium text-sm md:text-base">You'll Receive</span>
+                    <span className="text-lg md:text-xl font-bold text-success">
                       {calculateNetAmount()} {crypto.symbol}
                     </span>
                   </div>
@@ -151,16 +151,16 @@ const Withdraw = () => {
         </Card>
 
         {/* Info & Limits */}
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           {/* Important Info */}
-          <Card className="glass-card p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <AlertCircle className="h-5 w-5 text-warning" />
-              <h3 className="font-bold">Important Information</h3>
+          <Card className="glass-card p-4 md:p-6">
+            <div className="flex items-center gap-2 mb-3 md:mb-4">
+              <AlertCircle className="h-4 w-4 md:h-5 md:w-5 text-warning" />
+              <h3 className="font-bold text-sm md:text-base">Important Information</h3>
             </div>
-            <div className="space-y-3 text-sm text-muted-foreground">
+            <div className="space-y-2 md:space-y-3 text-xs md:text-sm text-muted-foreground">
               <div className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5" />
+                <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 md:mt-1.5 flex-shrink-0" />
                 <p>Double-check the withdrawal address. Transactions cannot be reversed.</p>
               </div>
               <div className="flex items-start gap-2">
@@ -179,10 +179,10 @@ const Withdraw = () => {
           </Card>
 
           {/* Withdrawal Limits */}
-          <Card className="glass-card p-6">
-            <h3 className="font-bold mb-4">Withdrawal Limits</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
+          <Card className="glass-card p-4 md:p-6">
+            <h3 className="font-bold text-sm md:text-base mb-3 md:mb-4">Withdrawal Limits</h3>
+            <div className="space-y-2 md:space-y-3">
+              <div className="flex items-center justify-between text-xs md:text-sm">
                 <span className="text-muted-foreground">Daily Limit</span>
                 <span className="font-medium">10 {selectedCrypto.symbol}</span>
               </div>
@@ -201,10 +201,10 @@ const Withdraw = () => {
           </Card>
 
           {/* Network Info */}
-          <Card className="glass-card p-6">
-            <h3 className="font-bold mb-4">Network Information</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
+          <Card className="glass-card p-4 md:p-6">
+            <h3 className="font-bold text-sm md:text-base mb-3 md:mb-4">Network Information</h3>
+            <div className="space-y-2 md:space-y-3">
+              <div className="flex items-center justify-between text-xs md:text-sm">
                 <span className="text-muted-foreground">Network</span>
                 <span className="font-medium">
                   {selectedCrypto.symbol === "BTC" ? "Bitcoin" : "Ethereum (ERC-20)"}
@@ -224,29 +224,29 @@ const Withdraw = () => {
       </div>
 
       {/* Recent Withdrawals */}
-      <Card className="glass-card p-6">
-        <h2 className="text-xl font-bold mb-6">Recent Withdrawals</h2>
+      <Card className="glass-card p-4 md:p-6">
+        <h2 className="text-lg md:text-xl font-bold mb-4 md:mb-6">Recent Withdrawals</h2>
         <div className="space-y-3">
           {recentWithdrawals.map((withdrawal, i) => (
             <div
               key={i}
-              className="flex items-center justify-between p-4 rounded-lg hover:bg-secondary/50 transition-all border border-border/50"
+              className="flex items-center justify-between p-3 md:p-4 rounded-lg hover:bg-secondary/50 transition-all border border-border/50"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-                  <Bitcoin className="h-5 w-5 text-primary-foreground" />
+              <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg gradient-primary flex items-center justify-center flex-shrink-0">
+                  <Bitcoin className="h-4 w-4 md:h-5 md:w-5 text-primary-foreground" />
                 </div>
-                <div>
-                  <p className="font-medium">
+                <div className="min-w-0">
+                  <p className="font-medium text-sm md:text-base">
                     {withdrawal.amount} {withdrawal.crypto}
                   </p>
-                  <p className="text-sm text-muted-foreground">{withdrawal.date}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{withdrawal.date}</p>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="font-bold">{withdrawal.usd}</p>
+              <div className="text-right flex-shrink-0 ml-2">
+                <p className="font-bold text-sm md:text-base">{withdrawal.usd}</p>
                 <p
-                  className={`text-sm ${
+                  className={`text-xs md:text-sm ${
                     withdrawal.status === "Completed" ? "text-success" : "text-warning"
                   }`}
                 >

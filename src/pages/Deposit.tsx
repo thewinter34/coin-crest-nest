@@ -68,23 +68,23 @@ const Deposit = () => {
   ];
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 pb-20 md:pb-8">
+    <div className="max-w-4xl mx-auto space-y-6 md:space-y-8 pb-20 md:pb-8 px-4 md:px-0">
       {/* Header */}
       <div>
-        <h1 className="text-4xl font-bold mb-2">Deposit Funds</h1>
-        <p className="text-muted-foreground">Add cryptocurrency to your staking wallet</p>
+        <h1 className="text-3xl md:text-4xl font-bold mb-2">Deposit Funds</h1>
+        <p className="text-sm md:text-base text-muted-foreground">Add cryptocurrency to your staking wallet</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Deposit Form */}
-        <Card className="glass-card p-6">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center">
-              <ArrowDownCircle className="h-6 w-6 text-primary-foreground" />
+        <Card className="glass-card p-4 md:p-6">
+          <div className="flex items-center gap-3 mb-4 md:mb-6">
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl gradient-primary flex items-center justify-center flex-shrink-0">
+              <ArrowDownCircle className="h-5 w-5 md:h-6 md:w-6 text-primary-foreground" />
             </div>
-            <div>
-              <h2 className="text-xl font-bold">Make Deposit</h2>
-              <p className="text-sm text-muted-foreground">Choose cryptocurrency</p>
+            <div className="min-w-0">
+              <h2 className="text-lg md:text-xl font-bold">Make Deposit</h2>
+              <p className="text-xs md:text-sm text-muted-foreground">Choose cryptocurrency</p>
             </div>
           </div>
 
@@ -122,9 +122,9 @@ const Deposit = () => {
 
                     {/* Deposit Address */}
                     <div className="space-y-2">
-                      <Label>Your Personal Deposit Address</Label>
-                      <div className="p-4 rounded-lg bg-secondary border border-border">
-                        <p className="text-sm font-mono break-all mb-3">
+                      <Label className="text-sm md:text-base">Your Personal Deposit Address</Label>
+                      <div className="p-3 md:p-4 rounded-lg bg-secondary border border-border">
+                        <p className="text-xs md:text-sm font-mono break-all mb-3">
                           {wallet?.wallet_address || "No wallet found"}
                         </p>
                         <Button
@@ -150,11 +150,11 @@ const Deposit = () => {
                     </div>
 
                     {/* QR Code Placeholder */}
-                    <div className="p-6 rounded-lg bg-secondary border border-border flex flex-col items-center justify-center">
-                      <div className="w-48 h-48 rounded-lg bg-background/50 flex items-center justify-center mb-3">
-                        <Wallet className="h-16 w-16 text-muted-foreground" />
+                    <div className="p-4 md:p-6 rounded-lg bg-secondary border border-border flex flex-col items-center justify-center">
+                      <div className="w-36 h-36 md:w-48 md:h-48 rounded-lg bg-background/50 flex items-center justify-center mb-3">
+                        <Wallet className="h-12 w-12 md:h-16 md:w-16 text-muted-foreground" />
                       </div>
-                      <p className="text-sm text-muted-foreground text-center">
+                      <p className="text-xs md:text-sm text-muted-foreground text-center">
                         Scan QR code to deposit {symbol}
                       </p>
                     </div>
@@ -170,13 +170,13 @@ const Deposit = () => {
         </Card>
 
         {/* Info & History */}
-        <div className="space-y-6">
+        <div className="space-y-4 md:space-y-6">
           {/* Important Info */}
-          <Card className="glass-card p-6">
-            <h3 className="font-bold mb-4">Important Information</h3>
-            <div className="space-y-3 text-sm text-muted-foreground">
+          <Card className="glass-card p-4 md:p-6">
+            <h3 className="font-bold text-sm md:text-base mb-3 md:mb-4">Important Information</h3>
+            <div className="space-y-2 md:space-y-3 text-xs md:text-sm text-muted-foreground">
               <div className="flex items-start gap-2">
-                <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5" />
+                <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1 md:mt-1.5 flex-shrink-0" />
                 <p>Send only {selectedCrypto} to this address. Other assets will be lost.</p>
               </div>
               <div className="flex items-start gap-2">
@@ -195,10 +195,10 @@ const Deposit = () => {
           </Card>
 
           {/* Network Info */}
-          <Card className="glass-card p-6">
-            <h3 className="font-bold mb-4">Network Information</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between text-sm">
+          <Card className="glass-card p-4 md:p-6">
+            <h3 className="font-bold text-sm md:text-base mb-3 md:mb-4">Network Information</h3>
+            <div className="space-y-2 md:space-y-3">
+              <div className="flex items-center justify-between text-xs md:text-sm">
                 <span className="text-muted-foreground">Network</span>
                 <span className="font-medium">
                   {selectedCrypto === "BTC" ? "Bitcoin" : "Ethereum (ERC-20)"}
@@ -218,29 +218,29 @@ const Deposit = () => {
       </div>
 
       {/* Recent Deposits */}
-      <Card className="glass-card p-6">
-        <h2 className="text-xl font-bold mb-6">Recent Deposits</h2>
+      <Card className="glass-card p-4 md:p-6">
+        <h2 className="text-lg md:text-xl font-bold mb-4 md:mb-6">Recent Deposits</h2>
         <div className="space-y-3">
           {recentDeposits.map((deposit, i) => (
             <div
               key={i}
-              className="flex items-center justify-between p-4 rounded-lg hover:bg-secondary/50 transition-all border border-border/50"
+              className="flex items-center justify-between p-3 md:p-4 rounded-lg hover:bg-secondary/50 transition-all border border-border/50"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-                  <Bitcoin className="h-5 w-5 text-primary-foreground" />
+              <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg gradient-primary flex items-center justify-center flex-shrink-0">
+                  <Bitcoin className="h-4 w-4 md:h-5 md:w-5 text-primary-foreground" />
                 </div>
-                <div>
-                  <p className="font-medium">
+                <div className="min-w-0">
+                  <p className="font-medium text-sm md:text-base">
                     {deposit.amount} {deposit.crypto}
                   </p>
-                  <p className="text-sm text-muted-foreground">{deposit.date}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground">{deposit.date}</p>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="font-bold">{deposit.usd}</p>
+              <div className="text-right flex-shrink-0 ml-2">
+                <p className="font-bold text-sm md:text-base">{deposit.usd}</p>
                 <p
-                  className={`text-sm ${
+                  className={`text-xs md:text-sm ${
                     deposit.status === "Confirmed" ? "text-success" : "text-warning"
                   }`}
                 >
