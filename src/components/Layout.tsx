@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, TrendingUp, Calculator, Users, ArrowDownCircle, ArrowUpCircle, LogOut } from "lucide-react";
+import { Home, TrendingUp, Calculator, Users, ArrowDownCircle, ArrowUpCircle, LogOut, Shield } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsAdmin } from "@/hooks/useIsAdmin";
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: Home },
@@ -16,6 +17,7 @@ const navigation = [
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const location = useLocation();
   const { signOut } = useAuth();
+  const { isAdmin } = useIsAdmin();
 
   return (
     <div className="min-h-screen bg-background">
@@ -64,6 +66,20 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   </Link>
                 );
               })}
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-2 rounded-lg transition-all",
+                    location.pathname === "/admin"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                  )}
+                >
+                  <Shield className="h-4 w-4" />
+                  <span className="text-sm font-medium">Admin</span>
+                </Link>
+              )}
             </div>
           </div>
         </div>
@@ -74,7 +90,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
       {/* Mobile navigation */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 border-t border-border/50 backdrop-blur-lg bg-card/90 z-50">
-        <div className="grid grid-cols-6 gap-1 p-2">
+        <div className={cn("grid gap-1 p-2", isAdmin ? "grid-cols-7" : "grid-cols-6")}>
           {navigation.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.href;
@@ -94,6 +110,20 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               </Link>
             );
           })}
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className={cn(
+                "flex flex-col items-center gap-1 py-2 px-1 rounded-lg transition-all",
+                location.pathname === "/admin"
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground"
+              )}
+            >
+              <Shield className="h-5 w-5" />
+              <span className="text-xs font-medium">Admin</span>
+            </Link>
+          )}
         </div>
       </nav>
     </div>
